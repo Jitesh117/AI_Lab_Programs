@@ -103,49 +103,54 @@ else:
     else:
         print("\nIt is solvable!")
         # list to store the visited states - (acts as a queue - FIFO)
+        count = 0
         visited = []
         visited.append(init)
 
         while(len(visited) > 0):
             curr_state = visited.pop(0)
-            print("Finding the possibilities from the state: ")
+            print("\nFinding the possibilities from the state: ")
             print_puzzle(curr_state)
 
 
             if(curr_state.index(0) not in [0, 1, 2]):
-                print("\nMoving top, ")
+                count += 1
+                print("\nStep ", count, ": Moving top, ")
                 modified_state = move_top(curr_state)
                 print_puzzle(modified_state)
                 if(modified_state == goal):
-                    print("Goal state reached!")
+                    print("Goal state reached! Number of moves = ", count)
                     break
                 visited.append(modified_state)
 
 
             if(curr_state.index(0) not in [2, 5, 8]):
-                print("\nMoving right, ")
+                count += 1
+                print("\nStep ", count, ": Moving right, ")
                 modified_state = move_right(curr_state)
                 print_puzzle(modified_state)
                 if(modified_state == goal):
-                    print("Goal state reached!")
+                    print("Goal state reached! Number of moves = ", count)
                     break
                 visited.append(modified_state)
 
             if(curr_state.index(0) not in [6, 7, 8]):
-                print("\nMoving bottom, ")
+                count += 1
+                print("\nStep ", count, ": Moving bottom, ")
                 modified_state = move_bottom(curr_state)
                 print_puzzle(modified_state)
                 if(modified_state == goal):
-                    print("Goal state reached!")
+                    print("Goal state reached! Number of moves = ", count)
                     break
                 visited.append(modified_state)
 
             if(curr_state.index(0) not in [0, 3, 6]):
-                print("\nMoving left, ")
+                count += 1
+                print("\nStep ", count, ": Moving left, ")
                 modified_state = move_left(curr_state)
                 print_puzzle(modified_state)
                 if(modified_state == goal):
-                    print("Goal state reached!")
+                    print("Goal state reached! Number of moves = ", count)
                     break
                 visited.append(modified_state)
 
