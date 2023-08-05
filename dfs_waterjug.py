@@ -91,21 +91,25 @@ def find_possibilities(curr_state, jug1, jug2, possibilites, visited, child_node
 
 
 def dfs(curr_state, visited, possibilities, jug1, jug2, target, child_nodes):
-    print("\ncalling dfs for ", curr_state)
+    # print("\ncalling dfs for ", curr_state)
+    # print(visited)
 
-    visited.add(curr_state)
+    visited.append(curr_state)
     child_nodes.add(curr_state)
 
     possibilities = find_possibilities(
         curr_state, jug1, jug2, possibilities, visited, child_nodes
     )
-    print(possibilities[curr_state])
+    # print(possibilities[curr_state])
     for next in possibilities[curr_state]:
         if next[0] == target or next[1] == target:
-            print("Reached target")
-            break
-        dfs(next, visited, possibilities, jug1, jug2, target, child_nodes)
-    return visited
+            visited.append(next)
+            # print("Reached target")
+            return True
+        else:
+            if dfs(next, visited, possibilities, jug1, jug2, target, child_nodes):
+                return True
+    return False
 
 
 print("\nWATER JUG PROBLEM USING DFS\n")
@@ -127,7 +131,7 @@ while target > jug1 and target > jug2:
 #   the state space tree goes infintely and the solution may not be found using DFS
 
 # when all the possibilities from the state are found
-visited = set()
+visited = []
 
 possibilities = {}
 
@@ -138,4 +142,7 @@ curr_state = (0, 0)
 
 output = dfs(curr_state, visited, possibilities, jug1, jug2, target, child_nodes)
 
-print(output)
+if not output:
+    print("Cannot reach the target state")
+else:
+    print(visited)
