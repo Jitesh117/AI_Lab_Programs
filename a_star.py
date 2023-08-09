@@ -4,6 +4,7 @@
 # the node with heuristic value = 0 is the goal state
 # (since, distance to reach the goal state is 0)
 
+
 class Node:
     def __init__(self, name, heuristic):
         self.name = name
@@ -24,7 +25,7 @@ for i in range(n):
     graph_node = Node(name, heuristic)
 
     dict[graph_node] = {}
-    
+
 
 # getting the neighbours of each of the nodes and the edge weights - they can be stored in the adjacency list dict
 print("Enter the neighbours followed by their cost (edge  weights): ")
@@ -33,12 +34,12 @@ for j in dict:
     print("For ", j.name, ": ")
     temp_dict = {}
     while True:
-        node_name, weight = input().split()
-        if not node_name:
+        userinput = input()
+        if userinput:
+            inputvalues = userinput.split()
+            temp_dict[inputvalues[0]] = inputvalues[1]
+        else:
             break
-        temp_dict[node_name] = weight
-    j = temp_dict
+    dict[j] = temp_dict
 
 print(dict)
-
-
