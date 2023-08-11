@@ -145,4 +145,16 @@ output = dfs(curr_state, visited, possibilities, jug1, jug2, target, child_nodes
 if not output:
     print("Cannot reach the target state")
 else:
-    print(visited)
+    # print(visited)
+    count = 0
+    for i in visited:
+        print(
+            "STEP ",
+            count + 1,
+            ": ",
+            "Jug 1 = ",
+            visited[count][0],
+            ", Jug 2 = ",
+            visited[count][1],
+        )
+        count += 1
