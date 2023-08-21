@@ -66,7 +66,10 @@ while True:
             print("SHORTEST PATH: ")
             print(possible_paths[0][0][0], end=" ")
             for i in range(1, len(path[0])):
-                print(" -> ", possible_paths[0][0][i], end="")
+                try:
+                    print(" -> ", possible_paths[0][0][i], end="")
+                except(IndexError):
+                    pass
             print("")
             print("Cost of the shortest path = ", possible_paths[0][1])
             
@@ -89,12 +92,13 @@ while True:
             concatenate the neighbour's name to the chosen path
             compute the heuristic value for that path
     """
-    # print("open list = ", open_list)
+    print("open list = ", open_list)
+    x = input()
     popped_items = []
     indexes = []
     for i in range(0, len(open_list)):
         if open_list[i][1] == min:
-            # print("popping ", open_list[i], " from open_list")
+            print("popping ", open_list[i], " from open_list")
             temp = open_list[i]
             indexes.append(i)
             popped_items.append(temp)
@@ -103,19 +107,23 @@ while True:
     for index in indexes:
         open_list.pop(index)
 
-    # print("popped items = ", popped_items)
+    print("popped items = ", popped_items)
+    x = input()
     for item in popped_items:
         if item[0][-1] == goal:
             possible_paths.append(item)
         else:
             # neighbours of item[-1]
             node = item[0][-1]
+            print("Neighbours of ", node, ": ", dict[node])
+            x = input()
             for neighbour in dict[node]:
-                new_path = item[0] + neighbour
-                heuristic = (
-                    item[1]
-                    - nodes_heuristic[node]
-                    + int(dict[node][neighbour])
-                    + nodes_heuristic[neighbour]
-                )
-                open_list.append([new_path, heuristic])
+                if neighbour not in item[0]:
+                    new_path = item[0] + neighbour
+                    heuristic = (
+                        item[1]
+                        - nodes_heuristic[node]
+                        + int(dict[node][neighbour])
+                        + nodes_heuristic[neighbour]
+                    )
+                    open_list.append([new_path, heuristic])
