@@ -3,22 +3,17 @@ def Cost(nodes_heuristic, condition, weight, key):
     cost = {}
     if len(condition["AND"]) != 0:
         AND_nodes = condition["AND"]
-        # print("AND nodes = ", AND_nodes)
-        # x = input()
         Path_A = " AND ".join(i for i in AND_nodes)
         PathA_heuristic = sum(nodes_heuristic[node] + weight for node in AND_nodes)
-        # print("and heuristic = ", PathA_heuristic)
         cost[Path_A] = PathA_heuristic
         new_heuristic_values[key] = PathA_heuristic
 
     if len(condition["OR"]) != 0:
         OR_nodes = condition["OR"]
-        # print("OR nodes = ", OR_nodes)
-        # x = input()
 
         Path_B = " OR ".join(i for i in OR_nodes)
         PathB_heuristic = min(nodes_heuristic[node] + weight for node in OR_nodes)
-        # print("or heuristic = ", PathB_heuristic)
+
         cost[Path_B] = PathB_heuristic
         new_heuristic_values[key] = PathB_heuristic
 
@@ -28,14 +23,12 @@ def Cost(nodes_heuristic, condition, weight, key):
 # Update the cost
 def update_cost(nodes_heuristic, neighbours, weight=1):
     Main_nodes = list(neighbours.keys())
-    # print("main nodes = neighbours.keys = ", Main_nodes)
+
     Main_nodes.reverse()
     least_cost = {}
     for key in Main_nodes:
         condition = neighbours[key]
-        # print(
-        # key, ":", neighbours[key], ">>>", Cost(nodes_heuristic, condition, weight)
-        # )
+
         c = Cost(nodes_heuristic, condition, weight, key)
         if len(c) > 0:
             nodes_heuristic[key] = min(c.values())

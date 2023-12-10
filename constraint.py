@@ -1,50 +1,48 @@
-def print_grid(grid):
-    for row in grid:
-        print(' '.join(row))
+from itertools import permutations
+from datetime import datetime, timedelta
 
-def is_valid_position(board, word, row, col, direction):
-    rows, cols = len(board), len(board[0])
+class TaskSchedulingCSP:
+    def __init__(self, tasks, durations, start_times):
+        self.tasks = tasks
+        self.durations = durations
+        self.start_times = start_times
+        self.domains = {task: [(start_time, start_time + timedelta(minutes=d)) for start_time in start_times] for task, d in zip(tasks, durations)}
 
-    if direction == "horizontal":
-        return col + len(word) <= cols and all(board[row][col + i] == word[i] or board[row][col + i] == "." for i in range(len(word)))
-    elif direction == "vertical":
-        return row + len(word) <= rows and all(board[row + i][col] == word[i] or board[row + i][col] == "." for i in range(len(word)))
-    elif direction == "diagonal":
-        return row + len(word) <= rows and col + len(word) <= cols and all(board[row + i][col + i] == word[i] or board[row + i][col + i] == "." for i in range(len(word)))
-    else:
-        return False
+    def is_valid_assignment(self, assignment):
+        for task1, time1 in assignment.items():
+            start_time1, end_time1 = time1
+            for task2, time2 in assignment.items():
+                if task1 != task2:
+                    start_time2, end_time2 = time2
+                    if start_time2 < end_time1 and end_time2 > start_time1:
+                        return False
+        return True
 
-def solve_word_search(board, words):
-    rows, cols = len(board), len(board[0])
+    def solve(self):
+        for perm in permutations(self.start_times, len(self.tasks)):
+            assignment = {task: (start_time, start_time + timedelta(minutes=d)) for task, start_time, d in zip(self.tasks, perm, self.durations)}
+            if self.is_valid_assignment(assignment):
+                return assignment
+        return None
 
-    for word in words:
-        for row in range(rows):
-            for col in range(cols):
-                for direction in ["horizontal", "vertical", "diagonal"]:
-                    if is_valid_position(board, word, row, col, direction):
-                        if direction == "horizontal":
-                            for i in range(len(word)):
-                                board[row][col + i] = word[i]
-                        elif direction == "vertical":
-                            for i in range(len(word)):
-                                board[row + i][col] = word[i]
-                        elif direction == "diagonal":
-                            for i in range(len(word)):
-                                board[row + i][col + i] = word[i]
-                        break
+def get_user_input():
+    tasks = input("Enter task names separated by commas (e.g., A,B,C): ").split(',')
+    durations = [int(x) for x in input("Enter task durations (in minutes) separated by commas: ").split(',')]
+    start_times = [datetime.strptime(x, '%H:%M') for x in input("Enter start times for tasks (HH:MM) separated by commas: ").split(',')]
+    return tasks, durations, start_times
 
-def word_search_solver(board, words):
-    solve_word_search(board, words)
-    print_grid(board)
+def print_schedule(schedule):
+    for task, (start_time, end_time) in schedule.items():
+        print(f"Task {task} scheduled from {start_time.strftime('%H:%M')} to {end_time.strftime('%H:%M')}")
 
+# Example usage
 if __name__ == "__main__":
-    # Example word search grid and words
-    grid = [
-        ["E", "A", "R", "T"],
-        ["N", "I", "N", "E"],
-        ["E", "N", "D", "E"],
-        ["A", "N", "D", "Y"]
-    ]
-    word_list = ["EAT", "AND", "ART", "DEN", "END", "TINE", "DEAR"]
+    tasks, durations, start_times = get_user_input()
+    task_scheduling_csp = TaskSchedulingCSP(tasks, durations, start_times)
+    solution = task_scheduling_csp.solve()
 
-    word_search_solver(grid, word_list)
+    if solution:
+        print("Solution found:")
+        print_schedule(solution)
+    else:
+        print("No solution found.")
